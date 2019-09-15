@@ -20,22 +20,22 @@ export default {
   },
   data() {
     return {
-      loggedin: localStorage.getItem("todoappuser") || false,
+      loggedin: localStorage.getItem("todo_app_user") || false,
       todos: []
     };
   },
   methods: {
     handleLogout: function() {
-      localStorage.removeItem("todoappuser");
+      localStorage.removeItem("todo_app_user");
       this.loggedin = false;
     },
     handleLogin: function() {
-      localStorage.setItem("todoappuser", true);
+      localStorage.setItem("todo_app_user", true);
       this.loggedin = true;
     }
   },
   mounted: function() {
-    if (localStorage.getItem("todoappuser")) {
+    if (localStorage.getItem("todo_app_user")) {
       this.loggedin = true;
       this.todos = JSON.parse(localStorage.getItem("todos")) || [];
     }

@@ -53,7 +53,7 @@ export default {
       /**
        * Just create a fake user here
        */
-      localStorage.setItem("todoappuser", true);
+      localStorage.setItem("todo_app_user", true);
       this.$router.go("/");
     }
   }
