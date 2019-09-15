@@ -9,6 +9,11 @@
             "UnauthRoleName": "amplify-todo-production-20190915102738-unauthRole",
             "StackName": "amplify-todo-production-20190915102738",
             "StackId": "arn:aws:cloudformation:eu-west-1:428236711530:stack/amplify-todo-production-20190915102738/0fabf0a0-d79b-11e9-8f48-0224bbdd2424"
+        },
+        "categories": {
+            "auth": {
+                "amplifytodo0cf0a1a9": {}
+            }
         }
     }
 }

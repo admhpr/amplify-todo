@@ -1,9 +1,17 @@
 <template>
-  <form v-if="toConfirm === true && confirmed === false"></form>
+  <form
+    v-if="toConfirm === true && confirmed === false"
+    @submit.prevent="handleConfirm"
+  >
+    <p>You have been emailed a unique code. Please enter it below.</p>
+    <p><input type="text" v-model="code" placeholder="Your code" /></p>
+    <p><button type="submit">Verify me</button></p>
+    <p v-if="error !== ''">{{ error }}</p>
+  </form>
 
   <div v-else-if="toConfirm === true && confirmed === true"></div>
 
-  <form method="" @submit.prevent="handleSubmit" v-else>
+  <form @submit.prevent="handleSubmit" v-else>
     <p>
       <label for="username">Username</label><br />
       <input
@@ -36,6 +44,7 @@
 </template>
 
 <script>
+import { Auth } from "aws-amplify";
 export default {
   name: "Register",
   data() {
@@ -45,16 +54,38 @@ export default {
       email: "",
       error: "",
       toConfirm: false,
-      confirmed: false
+      confirmed: false,
+      code: ""
     };
   },
   methods: {
     handleSubmit: function() {
       /**
-       * Just create a fake user here
+       * Use AWS to login now
        */
-      localStorage.setItem("todo_app_user", true);
-      this.$router.go("/");
+      Auth.signUp({
+        username: this.username,
+        password: this.password,
+        attributes: {
+          email: this.email
+        }
+      })
+        .then(data => {
+          this.toConfirm = true;
+          this.error = "";
+        })
+        .catch(err => (this.error = err.message));
+    },
+    handleConfirm: function() {
+      Auth.confirmSignUp(this.username, this.code)
+        .then(res => {
+          Auth.signIn(this.username, this.password)
+            .then(user => {
+              this.$router.go("/");
+            })
+            .catch(err => (this.error = err.message));
+        })
+        .catch(err => (this.error = err.message));
     }
   }
 };
